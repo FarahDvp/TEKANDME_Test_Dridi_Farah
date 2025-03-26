@@ -2,10 +2,19 @@ const Task = require('../models/Task');
 
 const getTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ user: req.user.id });
+        const { status, search } = req.query;
+        let filter = { user: req.user.id };
+
+        if (status) filter.status = status;
+        if (search) filter.$or = [
+            { title: new RegExp(search, 'i') },
+            { description: new RegExp(search, 'i') }
+        ];
+
+        const tasks = await Task.find(filter);
         res.json(tasks);
     } catch (error) {
-        res.status(500).json({ message: 'Server error while fetching tasks' });
+        res.status(500).json({ message: error.message });
     }
 };
 
