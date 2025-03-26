@@ -11,14 +11,14 @@ const protect = async (req, res, next) => {
             req.user = await User.findById(decoded.id).select('-password');
             next();
         } catch (error) {
-            console.error('Erreur de vérification du token:', error);
+            console.error('Token verification error:', error);
             res.status(401).json({
-                message: 'Accès non autorisé, token invalide',
+                message: 'Unauthorized access: Invalid token',
                 error: error.message
             });
         }
     } else {
-        res.status(401).json({ message: 'Accès non autorisé, aucun token fourni' });
+        res.status(401).json({ message: 'Unauthorized access: No token provided' });
     }
 };
 

@@ -11,13 +11,13 @@ const protect = require('../middleware/authMiddleware');
 router.post('/register', [
     body('name')
         .notEmpty()
-        .withMessage('Le nom est requis'),
+        .withMessage('Name is required'),
     body('email')
         .isEmail()
-        .withMessage('Email invalide'),
+        .withMessage('Invalid email'),
     body('password')
         .isLength({ min: 6 })
-        .withMessage('Le mot de passe doit avoir au moins 6 caractères')
+        .withMessage('Password must be at least 6 characters')
 ], registerUser);
 
 router.post('/login', loginUser);

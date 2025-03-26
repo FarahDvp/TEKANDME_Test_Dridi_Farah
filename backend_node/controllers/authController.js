@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
 
     try {
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: 'Utilisateur déjà existant' });
+        if (user) return res.status(400).json({ message: 'User already exists' });
 
         user = new User({ name, email, password });
         await user.save();
@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+            return res.status(401).json({ message: 'Incorrect email or password' });
         }
 
         res.json({
