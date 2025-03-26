@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const { corstAllowAll } = require("./configs/corsConfig");
 const { ConnectMongo } = require("./configs/mongoConfig");
 const taskRoutes = require("./routes/taskRoutes");
+const authRoutes = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.options("*", cors());
 app.use(bodyParser.json());
 
 app.use('/api/tasks', taskRoutes);
+app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
