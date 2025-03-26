@@ -2,7 +2,7 @@ const Task = require('../models/Task');
 
 const getTasks = async (req, res) => {
     try {
-        const { status, search } = req.query;
+        const { status, search, sortBy } = req.query;
         let filter = { user: req.user.id };
 
         if (status) filter.status = status;
@@ -11,7 +11,18 @@ const getTasks = async (req, res) => {
             { description: new RegExp(search, 'i') }
         ];
 
-        const tasks = await Task.find(filter);
+        let sort = {};
+        if (sortBy) {
+            if (sortBy === 'dueDate') {
+                sort = { dueDate: 1 };
+            } else if (sortBy === 'createdAt') {
+                sort = { createdAt: 1 };
+            } else if (sortBy === 'priority') {
+                sort = { priority: -1 };
+            }
+        }
+
+        const tasks = await Task.find(filter).sort(sort);
         res.json(tasks);
     } catch (error) {
         res.status(500).json({ message: error.message });
