@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 module.exports.ConnectMongo = () => {
     mongoose
-        .connect("mongodb://localhost:27017/todolist", {
+        .connect(process.env.MONGO_URI || "mongodb://localhost:27017/todolist", {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
