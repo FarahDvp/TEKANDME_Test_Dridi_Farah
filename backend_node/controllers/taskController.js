@@ -29,6 +29,26 @@ const getTasks = async (req, res) => {
     }
 };
 
+const getTasksByDate = async (req, res) => {
+    try {
+        const tasks = await Task.aggregate([
+            { $match: { user: req.user.id } },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } },
+                    tasks: { $push: "$$ROOT" }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+
+        res.json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 const createTask = async (req, res) => {
     const { title, description, dueDate } = req.body;
 
@@ -90,6 +110,7 @@ const deleteTask = async (req, res) => {
 
 module.exports = {
     getTasks,
+    getTasksByDate,
     createTask,
     updateTask,
     deleteTask
